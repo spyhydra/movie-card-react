@@ -3,7 +3,7 @@ import  React, { Component }  from 'react';
 import {data} from '../data';
 import Navbar from './Navbar';
 import MovieCard from './MovieCard';
-import movie from '../reducers';
+
 import{addMovies} from '../actions'
 
 class App extends React.Component{
@@ -20,8 +20,18 @@ class App extends React.Component{
      
      store.dispatch(addMovies(data));
 console.log(this.props.store.getState());
-
   }
+isMovieFavourite=(movie)=>{
+  const {favourites}=this.props.store.getState();
+
+  const index= favourites.indexOf(movie);
+
+  if(index !== -1){
+    return true;
+  }
+  return false;
+}
+  
   render(){
   const {list}=this.props.store.getState();
 return (
@@ -36,7 +46,11 @@ return (
      <div className='list'>
         {list.map((movie,index) => (
          
-          <MovieCard movie={movie} key={`movies-${index}`}/>
+          <MovieCard 
+          movie={movie} key={`movies-${index}`} 
+          dispatch={this.props.store.dispatch}
+          isFavourite={this.isMovieFavourite(movie)}
+          />
         ))}
         
 </div>
